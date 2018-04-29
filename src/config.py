@@ -4,8 +4,6 @@ import logging
 DEBUG = True
 HOST = os.getenv('HOST', '0.0.0.0')
 PORT = int(os.getenv('PORT', '5000'))
-APPLICATION_ROOT = os.getenv('PUSH_APPLICATION_ROOT', '/moneyserve')
-API_BASE_PATH = 'http://' + HOST + ':' + str(PORT) + APPLICATION_ROOT
 
 POSTGRES = {
     'user': os.getenv('POSTGRES_USER', 'postgres'),
