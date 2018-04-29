@@ -40,6 +40,8 @@ class SupermarketsResource(BaseResource):
     def get(self):
         """Get all supermarkets."""
         with_address = request.args.get('with_address') == 'true'
+        per_page = int(request.args.get('per_page'))
+        page = int(request.args.get('page'))
 
         order_by = request.args.get('order_by')
         order_condition_mapping = {
@@ -69,4 +71,6 @@ class SupermarketsResource(BaseResource):
                     Address.country,
             ) \
 
-        return self.result_to_dict_list(query.all())
+        query = query.paginate(page=page, per_page=per_page)
+
+        return [self.results_to_dict(supermarket) for supermarket in query.items]
