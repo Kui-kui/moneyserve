@@ -7,4 +7,8 @@ class Supermarket(db.Model, BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
-    address_id = db.Column(db.Integer, nullable=False)
+    address_id = db.Column(
+        db.Integer,
+        db.ForeignKey('address.id', onupdate='CASCADE', ondelete='CASCADE'),
+        nullable=False
+    )
