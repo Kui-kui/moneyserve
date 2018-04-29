@@ -1,2 +1,2 @@
 from .common import CommonResource
-from .supermarket import SupermarketResource
+from .supermarket import SupermarketResource, SupermarketsResource
