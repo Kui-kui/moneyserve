@@ -4,6 +4,7 @@ Define the REST verbs relative to the supermarket
 from flask import request
 from flask.ext.restful import Resource
 from flask.ext.restful.reqparse import Argument
+from sqlalchemy import desc
 
 from .abc import BaseResource
 from model import Address, Supermarket
@@ -40,11 +41,22 @@ class SupermarketsResource(BaseResource):
         """Get all supermarkets."""
         with_address = request.args.get('with_address') == 'true'
 
+        order_by = request.args.get('order_by')
+        order_condition_mapping = {
+            'id_asc': Supermarket.id,
+            'id_desc': desc(Supermarket.id),
+            'name_asc': Supermarket.name,
+            'name_desc': desc(Supermarket.name),
+        }
+
         query = Supermarket.query \
             .with_entities(
                 Supermarket.id,
                 Supermarket.name,
             ) \
+
+        if order_by:
+            query = query.order_by(order_condition_mapping[order_by])
 
         if with_address:
             query = query.outerjoin(Address, Address.id == Supermarket.address_id) \
