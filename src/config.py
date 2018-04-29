@@ -4,6 +4,7 @@ import logging
 DEBUG = True
 HOST = os.getenv('HOST', '0.0.0.0')
 PORT = int(os.getenv('PORT', '5000'))
+APPLICATION_ROOT = os.getenv('MONEYSERVE_ROOT', '/moneyserve')
 
 POSTGRES = {
     'user': os.getenv('POSTGRES_USER', 'postgres'),

@@ -1,8 +1,10 @@
 from flask import Flask
 from flask.ext.cors import CORS
+from flask.blueprints import Blueprint
 
 import config
 from model.abc import db
+import route
 
 server = Flask(__name__)
 server.debug = config.DEBUG
@@ -17,9 +19,11 @@ CORS(
     headers=['Content-Type', 'X-Requested-With', 'Authorization']
 )
 
-from route.common import common_blueprint
-server.register_blueprint(common_blueprint)
-
+for blueprint in vars(route).values():
+    if isinstance(blueprint, Blueprint):
+        server.register_blueprint(
+            blueprint, url_prefix=config.APPLICATION_ROOT
+        )
 
 if __name__ == '__main__':
     server.run(host=config.HOST, port=config.PORT)
