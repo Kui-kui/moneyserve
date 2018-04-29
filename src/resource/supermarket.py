@@ -40,8 +40,9 @@ class SupermarketsResource(BaseResource):
     def get(self):
         """Get all supermarkets."""
         with_address = request.args.get('with_address') == 'true'
-        per_page = int(request.args.get('per_page'))
-        page = int(request.args.get('page'))
+        per_page = int(request.args.get('per_page')
+                       ) if request.args.get('per_page') else 20
+        page = int(request.args.get('page')) if request.args.get('page') else 1
 
         order_by = request.args.get('order_by')
         order_condition_mapping = {
