@@ -7,7 +7,6 @@ from flask.ext.restful.reqparse import Argument
 
 from .abc import BaseResource
 from model import Address, Supermarket
-from util import parse_params
 
 
 class SupermarketResource(BaseResource):
@@ -39,16 +38,23 @@ class SupermarketsResource(BaseResource):
 
     def get(self):
         """Get all supermarkets."""
+        with_address = request.args.get('with_address') == 'true'
+
         query = Supermarket.query \
-            .outerjoin(Address, Address.id == Supermarket.address_id) \
             .with_entities(
                 Supermarket.id,
                 Supermarket.name,
-                Address.street,
-                Address.postal_code,
-                Address.city,
-                Address.country,
             ) \
-            .all()
 
-        return self.result_to_dict_list(query)
+        if with_address:
+            query = query.outerjoin(Address, Address.id == Supermarket.address_id) \
+                .with_entities(
+                    Supermarket.id,
+                    Supermarket.name,
+                    Address.street,
+                    Address.postal_code,
+                    Address.city,
+                    Address.country,
+            ) \
+
+        return self.result_to_dict_list(query.all())
