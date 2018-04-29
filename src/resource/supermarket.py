@@ -2,10 +2,9 @@
 Define the REST verbs relative to the supermarket
 """
 from flask.ext.restful import Resource
-from sqlalchemy import func, desc
 
 from .abc import BaseResource
-from model import Supermarket
+from model import Address, Supermarket
 
 
 class SupermarketResource(BaseResource):
@@ -15,9 +14,14 @@ class SupermarketResource(BaseResource):
         """Get supermarket by id."""
         supermarket = Supermarket.query \
             .filter(Supermarket.id == supermarket_id) \
+            .outerjoin(Address, Address.id == Supermarket.address_id) \
             .with_entities(
                 Supermarket.id,
-                Supermarket.name
+                Supermarket.name,
+                Address.street,
+                Address.postal_code,
+                Address.city,
+                Address.country,
             ) \
             .one()
 
